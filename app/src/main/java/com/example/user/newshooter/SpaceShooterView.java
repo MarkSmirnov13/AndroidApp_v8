@@ -253,7 +253,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         }
         //accTime++;
         // Update all the invaders bullets if active
-
+//
         // Did an invader bump into the edge of the screen
 
         if(lost){
