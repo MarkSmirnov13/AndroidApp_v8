@@ -2,6 +2,7 @@ package com.example.user.newshooter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,11 +17,13 @@ import java.io.OutputStreamWriter;
 
 public class FinalActivity extends Activity {
     final String FILENAME = "file";
-
+    MediaPlayer mPlayer1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final);
+        mPlayer1 = MediaPlayer.create(this, R.raw.dv);
+        mPlayer1.start();
 
         TextView tw = (TextView) findViewById(R.id.textView);
         TextView tw1 = (TextView) findViewById(R.id.textView1);
@@ -71,6 +74,7 @@ public class FinalActivity extends Activity {
     public void onStartButton2(View v){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        mPlayer1.stop();
     }
 
 }

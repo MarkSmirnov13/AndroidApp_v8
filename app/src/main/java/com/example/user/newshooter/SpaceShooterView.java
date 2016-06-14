@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,7 +19,8 @@ import android.view.SurfaceView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-
+import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
 /**
  * Created by user on 6/8/2016.
  */
@@ -35,7 +37,8 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     // A boolean which we will set and unset
     // when the game is running- or not.
     private volatile boolean playing;
-
+    private volatile boolean play;
+    private boolean play1;
     // Game is paused at the start
     private boolean paused = true;
 
@@ -57,7 +60,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     //private EnemyShip enemyShip;
     private ArrayList<EnemyShip> enemyShip;
     private PlayerShip playerShip;
-
+    private PlayerShip pause;
     // The player's bullets
     private ArrayList<Bullet> bullets;
 
@@ -107,10 +110,19 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     int acc = 50;
     int accSpeed = 100;
     int eSpeed = 45;
-    int bSpeed = 10;
+    int bSpeed = 30;
+    boolean loaded=false;
+    private int soundID1;
+    private int soundID2;
+    private int soundID3;
+
+    MediaPlayer mPlayer;
+
+    public int x = 1;
 
     // When the we initialize (call new()) on gameView
     // This special constructor method runs
+
     public SpaceShooterView(Context context, int x, int y) {
 
         // The next line of code asks the
@@ -131,38 +143,17 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // This SoundPool is deprecated but don't worry
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
 
-        try{
-            // Create objects of the 2 required classes
-            AssetManager assetManager = context.getAssets();
-            AssetFileDescriptor descriptor;
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener(){
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status){
+                loaded=true;
+                Log.e("Test","sampleId="+sampleId+" status="+status);
+            }
+        });
 
-            // Load our fx in memory ready for use
-            descriptor = assetManager.openFd("shoot.ogg");
-            shootID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("invaderexplode.ogg");
-            invaderExplodeID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("damageshelter.ogg");
-            damageShelterID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("playerexplode.ogg");
-            playerExplodeID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("damageshelter.ogg");
-            damageShelterID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("uh.ogg");
-            uhID = soundPool.load(descriptor, 0);
-
-            descriptor = assetManager.openFd("oh.ogg");
-            ohID = soundPool.load(descriptor, 0);
-
-        }catch(IOException e){
-            // Print an error message to the console
-            Log.e("error", "failed to load sound files");
-        }
-
+        soundID1= soundPool.load(context, R.raw.shoot,1);
+        soundID2 = soundPool.load(context,R.raw.vzr,1);
+        soundID3 = soundPool.load(context,R.raw.uh,1);
         prepareLevel();
     }
 
@@ -177,7 +168,6 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // Initialize the invadersBullets array
 
         // Build an army of invaders
-        //enemyShip = new EnemyShip(context, screenX-150, screenY-1000);
         enemyShip = new ArrayList<EnemyShip>();
         // Build the shelters
 
@@ -188,6 +178,10 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     @Override
     public void run() {
         score = 0;
+        lives = 3;
+        //if (x > 0) {
+        mPlayer = MediaPlayer.create(context, R.raw.bit);
+        mPlayer.start();
         while (playing) {
 
             // Capture the current time in milliseconds in startFrameTime
@@ -204,6 +198,8 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
                 fps = 1000 / timeThisFrame;
             }
         }
+
+        mPlayer.stop();
     }
 
     private void update(){
@@ -211,6 +207,13 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // Did an invader bump into the side of the screen
         boolean bumped = false;
 
+        if (score >= 10){
+            if (score == 10) {
+                mPlayer.stop();
+                mPlayer = MediaPlayer.create(context, R.raw.cool);
+            }
+            mPlayer.start();
+        }
         // Has the player lost
         boolean lost = false;
 
@@ -242,7 +245,8 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
             if(e.getStatus()) {
                 e.update(fps);
             }
-            if(e.getY() > screenY && e.isVisible() == true) {
+            if((e.getY() > screenY && e.isVisible() == true) || (RectF.intersects(playerShip.getRect(), e.getRect()) && e.isVisible() == true)) {
+                soundPool.play(soundID3, 1, 1, 0, 0, 1);
                 enemyShip.remove(e);
                 lives--;
                 if (lives == 0){
@@ -285,6 +289,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
                         if (e.getStatus()) {
                             if (e.isVisible()) {
                                 if (RectF.intersects(b.getRect(), e.getRect())) {
+                                    soundPool.play(soundID2, 1, 1, 0, 0, 1);
                                     e.setVisible(false);
                                     b.setVisible(false);
                                     score = score + 1;
@@ -309,6 +314,18 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
             //canvas.drawColor(Color.argb(255, 26, 128, 182));
             canvas.drawColor(Color.BLACK);
             // Choose the brush color for drawing
+            if(score <= 10) {
+                //mPlayer = MediaPlayer.create(context, R.raw.bit);
+                paint.setColor(Color.WHITE);
+                for (int i = 0; i < 50; i++)
+                    canvas.drawCircle(random.nextInt(screenX), random.nextInt(screenY), 1, paint);
+            }
+            else if (score > 10){
+                //mPlayer = MediaPlayer.create(context, R.raw.cool);
+                paint.setColor(Color.argb(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
+                for (int i = 0; i < 50; i++)
+                    canvas.drawCircle(random.nextInt(screenX), random.nextInt(screenY), 7, paint);
+            }
             paint.setColor(Color.argb(255, 255, 255, 255));
 
             // Draw the player spaceship
@@ -332,6 +349,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
                 if (bull.getStatus() && bull.isVisible()) {
                     //canvas.drawRect(bull.getRect(), paint);
                     canvas.drawBitmap(bull.getBitmap(), null, bull.getRect(), paint);
+                    soundPool.play(soundID1, 0.1f,0.1f,0,0,1);
                 }
             }
             // Draw the invaders bullets if active

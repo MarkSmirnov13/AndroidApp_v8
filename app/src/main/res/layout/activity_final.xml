@@ -26,6 +26,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView4"
+        android:src="@drawable/bs"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,8 +59,9 @@
         android:textIsSelectable="false"
         android:textSize="45dp"
         android:textColor="#fffb07"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/imageView2"
+        android:layout_alignRight="@+id/imageButton1"
+        android:layout_alignEnd="@+id/imageButton1" />
 
     <ImageButton
         android:layout_width="wrap_content"
