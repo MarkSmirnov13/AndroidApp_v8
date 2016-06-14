@@ -1,8 +1,10 @@
 package com.example.user.newshooter;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -26,8 +28,6 @@ public class FinalActivity extends Activity {
         if (readFile() < SpaceShooterView.score)
             writeFile();
         tw1.setText(""+readFile());
-        SpaceShooterView.score = 0;
-        SpaceShooterView.lives = 3;
     }
     int readFile() {
         try {
@@ -67,4 +67,10 @@ public class FinalActivity extends Activity {
             e.printStackTrace();
         }
     }
+
+    public void onStartButton2(View v){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }

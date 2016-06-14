@@ -187,6 +187,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     private int s = 1;
     @Override
     public void run() {
+        score = 0;
         while (playing) {
 
             // Capture the current time in milliseconds in startFrameTime
