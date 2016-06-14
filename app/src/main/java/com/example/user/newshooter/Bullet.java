@@ -88,7 +88,7 @@ public class Bullet {
         //return false;
         return true;
     }
-//
+
     public void update(long fps){
 
         // Just move up or down
