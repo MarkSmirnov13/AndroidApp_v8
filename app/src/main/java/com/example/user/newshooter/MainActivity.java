@@ -25,5 +25,6 @@ public class MainActivity extends Activity {
     public void onStartButton(View v) {
         Intent intent = new Intent(this, SpaceShooterActivity.class);
         startActivity(intent);
+        this.finish();
     }
 }

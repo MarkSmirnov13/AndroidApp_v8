@@ -77,6 +77,7 @@ public class FinalActivity extends Activity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         mPlayer1.stop();
+        this.finish();
     }
 
 }

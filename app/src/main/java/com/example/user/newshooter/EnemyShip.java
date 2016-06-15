@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
-import java.util.Random;
-import java.util.ArrayList;
 
 /**
  * Created by user on 6/8/2016.
@@ -34,12 +32,6 @@ public class EnemyShip {
     private boolean isVisible;
 
     private boolean isActive;
-
-    public final int UP = 0;
-
-    int heading = -1;
-
-    final Random random = new Random();
 
     public EnemyShip(Context context, int screenX, int screenY){
         // Initialize a blank RectF
@@ -116,19 +108,11 @@ public class EnemyShip {
         isVisible = visible;
     }
 
-    public float getShipSpeed() { return shipSpeed; }
-
-    public void setShipSpeed(float shipSpeed) { this.shipSpeed = shipSpeed; }
-
     public RectF getRect() {
         return rect;
     }
 
-    public void setY(float y) {
-        this.y = y;
-    }
+    public void setStatus(boolean active) { isActive = active; }
 
-    public void setActive(boolean active) {
-        isActive = active;
-    }
+    public void setY(float y) { this.y = y; }
 }

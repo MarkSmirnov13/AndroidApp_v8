@@ -35,6 +35,13 @@ public class SpaceShooterActivity extends Activity {
         setContentView(spaceShooterView);
 
     }
+    // Вызывается в начале "видимого" состояния.
+    @Override
+    public void onStart(){
+        super.onStart();
+        // Примените к UI все необходимые изменения, так как
+        // Активность теперь видна на экране.
+    }
 
     // This method executes when the player starts the game
     @Override
@@ -52,5 +59,22 @@ public class SpaceShooterActivity extends Activity {
 
         // Tell the gameView pause method to execute
         spaceShooterView.pause();
+    }
+    @Override
+    public void onStop(){
+        // "Замораживает" пользовательский интерфейс, потоки
+        // или операции, которые могут подождать, пока Активность
+        // не отображается на экране. Сохраняйте все введенные
+        // данные и изменения в UI так, как будто после вызова
+        // этого метода процесс должен быть закрыт.
+        super.onStop();
+    }
+
+    // Вызывается перед выходом из "полноценного" состояния.
+    @Override
+    public void onDestroy(){
+        // Очистите все ресурсы. Это касается завершения работы
+        // потоков, закрытия соединений с базой данных и т. д.
+        super.onDestroy();
     }
 }

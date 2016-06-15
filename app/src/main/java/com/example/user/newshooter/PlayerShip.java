@@ -91,30 +91,6 @@ public class PlayerShip {
         return height;
     }
 
-    public float getMovX() {
-        return movX;
-    }
-
-    public void setMovX(float movX) {
-        this.movX = movX;
-    }
-
-    public float getMovY() {
-        return movY;
-    }
-
-    public void setMovY(float movY) {
-        this.movY = movY;
-    }
-
-    public boolean isShipMoving() {
-        return shipMoving;
-    }
-
-    public void setShipMoving(boolean shipMoving) {
-        this.shipMoving = shipMoving;
-    }
-
     public void setX(float x) {
         this.x = x;
     }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
-import android.util.Log;
 
 /**
  * Created by user on 6/8/2016.
@@ -21,7 +20,6 @@ public class Bullet {
 
     // Which way is it shooting
     public final int UP = 0;
-    //public final int DOWN = 1;
 
     // Going nowhere
     int heading = -1;
@@ -45,10 +43,7 @@ public class Bullet {
         // Initialize the bitmap
         bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet);
         // stretch the bitmap to a size appropriate for the screen resolution
-        bitmap = Bitmap.createScaledBitmap(bitmap,
-                (int) (width),
-                (int) (height),
-                false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
     }
 
     public boolean isVisible() {
@@ -79,13 +74,10 @@ public class Bullet {
         if (!isActive) {
             x = startX;
             y = startY;
-            //Log.d("inB","fds");
             heading = direction;
             isActive = true;
-            //return true;
         }
         // Bullet already active
-        //return false;
         return true;
     }
 

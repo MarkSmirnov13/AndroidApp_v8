@@ -2,8 +2,6 @@ package com.example.user.newshooter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,11 +14,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import android.media.SoundPool;
-import android.media.SoundPool.OnLoadCompleteListener;
 /**
  * Created by user on 6/8/2016.
  */
@@ -37,10 +32,6 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     // A boolean which we will set and unset
     // when the game is running- or not.
     private volatile boolean playing;
-    private volatile boolean play;
-    private boolean play1;
-    // Game is paused at the start
-    private boolean paused = true;
 
     // A Canvas and a Paint object
     private Canvas canvas;
@@ -61,55 +52,24 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     private ArrayList<EnemyShip> enemyShip;
     private PlayerShip playerShip;
     private PauseButton pauseButton;
-    private PlayerShip pause;
     // The player's bullets
     private ArrayList<Bullet> bullets;
 
-
-    // The invaders bullets
-    private Bullet[] invadersBullets = new Bullet[200];
-    private int nextBullet;
-    private int maxInvaderBullets = 10;
-
-    // Up to 60 invaders
-//    Invader[] invaders = new Invader[60];
-//    int numInvaders = 0;
-
-    // The player's shelters are built from bricks
-//    private DefenceBrick[] bricks = new DefenceBrick[400];
-//    private int numBricks;
-
     // For sound FX
     private SoundPool soundPool;
-    private int playerExplodeID = -1;
-    private int invaderExplodeID = -1;
-    private int shootID = -1;
-    private int damageShelterID = -1;
-    private int uhID = -1;
-    private int ohID = -1;
 
     // The score
     static int score = 0;
-
     // Lives
     static int lives = 3;
 
-    // How menacing should the sound be?
-    private long menaceInterval = 1000;
-    // Which menace sound should play next
-    private boolean uhOrOh;
-    // When did we last play a menacing sound
-    private long lastMenaceTime = System.currentTimeMillis();
 
     private boolean wasTouched;
 
 
     int bTime = 0;
     int eTime = 0;
-    int accTime = 0;
 
-    int acc = 50;
-    int accSpeed = 100;
     int eSpeed = 45;
     int bSpeed = 10;
     boolean loaded=false;
@@ -119,13 +79,12 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
 
     MediaPlayer mPlayer;
 
-    public int x = 1;
+    private int a = 0;
 
     // When the we initialize (call new()) on gameView
     // This special constructor method runs
 
     public SpaceShooterView(Context context, int x, int y) {
-
         // The next line of code asks the
         // SurfaceView class to set up our object.
         // How kind.
@@ -170,16 +129,16 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
 
         // Build an army of invaders
         enemyShip = new ArrayList<EnemyShip>();
+        for (int i = 0; i <= 15; i++) {
+            EnemyShip enemy = new EnemyShip(context, screenX, screenY);
+            enemyShip.add(enemy);
+        }
         // Build the shelters
         pauseButton = new PauseButton(context, screenX-100, screenY-200);
 
     }
-
-    private int z = 1;
-    private int s = 1;
     @Override
     public void run() {
-        //if (x > 0) {
         mPlayer = MediaPlayer.create(context, R.raw.bit);
         mPlayer.start();
         while (playing) {
@@ -203,10 +162,6 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     }
 
     private void update(){
-
-        // Did an invader bump into the side of the screen
-        boolean bumped = false;
-
         if (score >= 100){
             if (score == 100) {
                 mPlayer.stop();
@@ -217,16 +172,19 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // Has the player lost
         boolean lost = false;
 
-        long nextTime = System.currentTimeMillis();
         if(bTime == bSpeed){
             playerShip.shoot(bullets);
             bTime-=bSpeed;
         }
         else bTime++;
         if(eTime == eSpeed){
-            EnemyShip enemy = new EnemyShip(context, screenX, screenY);
+            EnemyShip enemy = enemyShip.get(a);
             enemy.startShip((random.nextInt((screenX-(int)enemy.getWidth()*2))+(int)enemy.getWidth())+random.nextFloat());
-            enemyShip.add(enemy);
+            enemy.setY(-200);
+            a++;
+            if (a == 15) {
+                a = 0;
+            }
             eTime-=eSpeed;
         }
         else eTime++;
@@ -235,19 +193,13 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // Update the invaders if visible
         for(int i = 0; i < enemyShip.size(); i++){
             EnemyShip e = enemyShip.get(i);
-            /*if (accTime == accSpeed && e.getShipSpeed() < 500 && eSpeed > 45){
-                eSpeed--;
-                e.setShipSpeed(e.getShipSpeed() + acc);
-                accTime -= accSpeed;
-                Log.d("Okey", "Okey");
-            }
-            accTime++;*/
             if(e.getStatus()) {
                 e.update(fps);
             }
             if((e.getY() > screenY && e.isVisible() == true) || (RectF.intersects(playerShip.getRect(), e.getRect()) && e.isVisible() == true)) {
                 soundPool.play(soundID3, 1, 1, 0, 0, 1);
-                enemyShip.remove(e);
+                e.setVisible(false);
+                e.setStatus(false);
                 lives--;
                 if (lives == 0){
                     playing = false;
@@ -256,7 +208,6 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
                 }
             }
         }
-        //accTime++;
         // Update all the invaders bullets if active
 //
         // Did an invader bump into the edge of the screen
@@ -275,8 +226,6 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
             if(b.getY() < 0)
                 bullets.remove(b);
         }
-        //Log.d("bulletsCount",String.valueOf(bullets.size()));
-
         // Has the player's bullet hit the top of the screen
 
         // Has an invaders bullet hit the bottom of the screen
@@ -291,9 +240,9 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
                                 if (RectF.intersects(b.getRect(), e.getRect())) {
                                     soundPool.play(soundID2, 1, 1, 0, 0, 1);
                                     e.setVisible(false);
+                                    e.setStatus(false);
                                     b.setVisible(false);
                                     score = score + 1;
-                                    Log.d("bulletsCount", "true");
                                 }
                             }
                         }
@@ -311,18 +260,15 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
             canvas = ourHolder.lockCanvas();
 
             // Draw the background color
-            //canvas.drawColor(Color.argb(255, 26, 128, 182));
             canvas.drawColor(Color.BLACK);
             canvas.drawBitmap(pauseButton.getBitmap(), pauseButton.getX(), pauseButton.getY(), paint);
             // Choose the brush color for drawing
             if(score <= 100) {
-                //mPlayer = MediaPlayer.create(context, R.raw.bit);
                 paint.setColor(Color.WHITE);
                 for (int i = 0; i < 50; i++)
                     canvas.drawCircle(random.nextInt(screenX), random.nextInt(screenY), 1, paint);
             }
             else if (score > 100){
-                //mPlayer = MediaPlayer.create(context, R.raw.cool);
                 paint.setColor(Color.argb(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
                 for (int i = 0; i < 50; i++)
                     canvas.drawCircle(random.nextInt(screenX), random.nextInt(screenY), 7, paint);
@@ -348,9 +294,8 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
             for (int i = 0; i < bullets.size(); i++) {
                 Bullet bull = bullets.get(i);
                 if (bull.getStatus() && bull.isVisible()) {
-                    //canvas.drawRect(bull.getRect(), paint);
                     canvas.drawBitmap(bull.getBitmap(), null, bull.getRect(), paint);
-                    soundPool.play(soundID1, 0.1f,0.1f,0,0,1);
+                    //soundPool.play(soundID1, 0.1f,0.1f,0,0,1);
                 }
             }
             // Draw the invaders bullets if active

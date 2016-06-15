@@ -9,15 +9,21 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:noHistory="true"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SpaceShooterActivity" />
-        <activity android:name=".FinalActivity"></activity>
+        <activity android:name=".SpaceShooterActivity"
+            android:noHistory="true"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".FinalActivity"
+            android:noHistory="true"
+            android:launchMode="singleInstance"></activity>
     </application>
 
 </manifest>
