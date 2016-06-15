@@ -18,6 +18,8 @@ public class MainActivity extends Activity {
 
         MediaPlayer mPlayer = MediaPlayer.create(this, R.raw.zv);
         mPlayer.start(); // no need to call prepare(); create() does that for you
+        SpaceShooterView.score = 0;
+        SpaceShooterView.lives = 3;
     }
 
     public void onStartButton(View v) {

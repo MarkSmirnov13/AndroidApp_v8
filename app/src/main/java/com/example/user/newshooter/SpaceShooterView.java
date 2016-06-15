@@ -60,6 +60,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     //private EnemyShip enemyShip;
     private ArrayList<EnemyShip> enemyShip;
     private PlayerShip playerShip;
+    private PauseButton pauseButton;
     private PlayerShip pause;
     // The player's bullets
     private ArrayList<Bullet> bullets;
@@ -110,7 +111,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     int acc = 50;
     int accSpeed = 100;
     int eSpeed = 45;
-    int bSpeed = 30;
+    int bSpeed = 10;
     boolean loaded=false;
     private int soundID1;
     private int soundID2;
@@ -170,6 +171,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // Build an army of invaders
         enemyShip = new ArrayList<EnemyShip>();
         // Build the shelters
+        pauseButton = new PauseButton(context, screenX-100, screenY-200);
 
     }
 
@@ -177,8 +179,6 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     private int s = 1;
     @Override
     public void run() {
-        score = 0;
-        lives = 3;
         //if (x > 0) {
         mPlayer = MediaPlayer.create(context, R.raw.bit);
         mPlayer.start();
@@ -207,8 +207,8 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // Did an invader bump into the side of the screen
         boolean bumped = false;
 
-        if (score >= 10){
-            if (score == 10) {
+        if (score >= 100){
+            if (score == 100) {
                 mPlayer.stop();
                 mPlayer = MediaPlayer.create(context, R.raw.cool);
             }
@@ -313,14 +313,15 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
             // Draw the background color
             //canvas.drawColor(Color.argb(255, 26, 128, 182));
             canvas.drawColor(Color.BLACK);
+            canvas.drawBitmap(pauseButton.getBitmap(), pauseButton.getX(), pauseButton.getY(), paint);
             // Choose the brush color for drawing
-            if(score <= 10) {
+            if(score <= 100) {
                 //mPlayer = MediaPlayer.create(context, R.raw.bit);
                 paint.setColor(Color.WHITE);
                 for (int i = 0; i < 50; i++)
                     canvas.drawCircle(random.nextInt(screenX), random.nextInt(screenY), 1, paint);
             }
-            else if (score > 10){
+            else if (score > 100){
                 //mPlayer = MediaPlayer.create(context, R.raw.cool);
                 paint.setColor(Color.argb(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
                 for (int i = 0; i < 50; i++)
@@ -396,7 +397,13 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: // нажатие
-
+                if ((pauseButton.getX() < x && (pauseButton.getX() + pauseButton.getWidth() > x))
+                        && (pauseButton.getY() < y && (pauseButton.getY() + pauseButton.getHeight() > y))) {
+                    if (playing)
+                        pause();
+                    else
+                        resume();
+                }
                 if ((playerShip.getX() < x && (playerShip.getX() + playerShip.getWidth() > x))
                         && (playerShip.getY() < y && (playerShip.getY() + playerShip.getHeight() > y))) {
 
