@@ -1,4 +1,4 @@
-package com.example.user.newshooter;
+package com.partymakers.user.newshooter;
 
 import org.junit.Test;
 

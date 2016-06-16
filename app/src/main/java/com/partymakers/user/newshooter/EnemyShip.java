@@ -1,9 +1,11 @@
-package com.example.user.newshooter;
+package com.partymakers.user.newshooter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.RectF;
+
+import com.example.user.newshooter.R;
 
 /**
  * Created by user on 6/8/2016.
@@ -27,7 +29,7 @@ public class EnemyShip {
     private float y;
 
     // This will hold the pixels per second speedthat the paddle will move
-    private float shipSpeed;
+    public float shipSpeed;
 
     private boolean isVisible;
 
@@ -47,7 +49,7 @@ public class EnemyShip {
         bitmap = Bitmap.createScaledBitmap(bitmap, (int) (width), (int) (height), false);
 
         // How fast is the spaceship in pixels per second
-        shipSpeed = 500;
+        shipSpeed = 750;
 
         isVisible = false;
 
@@ -115,4 +117,8 @@ public class EnemyShip {
     public void setStatus(boolean active) { isActive = active; }
 
     public void setY(float y) { this.y = y; }
+
+    public void setShipSpeed(float shipSpeed) {
+        this.shipSpeed = shipSpeed;
+    }
 }

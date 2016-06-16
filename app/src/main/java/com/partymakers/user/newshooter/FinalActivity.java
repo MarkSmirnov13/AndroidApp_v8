@@ -1,4 +1,4 @@
-package com.example.user.newshooter;
+package com.partymakers.user.newshooter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.user.newshooter.R;
+import com.partymakers.user.newshooter.MainActivity;
+import com.partymakers.user.newshooter.SpaceShooterView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,7 +31,7 @@ public class FinalActivity extends Activity {
 
         TextView tw = (TextView) findViewById(R.id.textView);
         TextView tw1 = (TextView) findViewById(R.id.textView1);
-        tw.setText("           "+SpaceShooterView.score);
+        tw.setText("           "+ SpaceShooterView.score);
         if (readFile() < SpaceShooterView.score)
             writeFile();
         tw1.setText(""+readFile());
@@ -77,7 +81,7 @@ public class FinalActivity extends Activity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         mPlayer1.stop();
-        this.finish();
+        //this.finish();
     }
 
 }

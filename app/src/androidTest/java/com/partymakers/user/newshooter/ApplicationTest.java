@@ -1,4 +1,4 @@
-package com.example.user.newshooter;
+package com.partymakers.user.newshooter;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

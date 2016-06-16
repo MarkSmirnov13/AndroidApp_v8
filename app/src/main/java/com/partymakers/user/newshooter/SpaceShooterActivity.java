@@ -1,4 +1,4 @@
-package com.example.user.newshooter;
+package com.partymakers.user.newshooter;
 
 /**
  * Created by user on 6/8/2016.
@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+
+import com.partymakers.user.newshooter.SpaceShooterView;
 
 // SpaceInvadersActivity is the entry point to the game.
 // It will handle the lifecycle of the game by calling

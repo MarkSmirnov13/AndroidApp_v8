@@ -1,4 +1,4 @@
-package com.example.user.newshooter;
+package com.partymakers.user.newshooter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.user.newshooter.R;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -80,7 +82,8 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     MediaPlayer mPlayer;
 
     private int a = 0;
-
+    private int s = 1;
+    private int d = 1;
     // When the we initialize (call new()) on gameView
     // This special constructor method runs
 
@@ -128,7 +131,7 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
         // Initialize the invadersBullets array
 
         // Build an army of invaders
-        enemyShip = new ArrayList<EnemyShip>();
+        enemyShip = new ArrayList<>();
         for (int i = 0; i <= 15; i++) {
             EnemyShip enemy = new EnemyShip(context, screenX, screenY);
             enemyShip.add(enemy);
@@ -162,10 +165,25 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
     }
 
     private void update(){
-        if (score >= 100){
+        if (score >= 100 && score < 500){
             if (score == 100) {
-                mPlayer.stop();
-                mPlayer = MediaPlayer.create(context, R.raw.cool);
+                if (s == 1) {
+                    mPlayer.stop();
+                    mPlayer = MediaPlayer.create(context, R.raw.cool);
+                    s++;
+                }
+
+            }
+            mPlayer.start();
+        }
+
+        if (score >= 500){
+            if (score == 500){
+                if (d == 1) {
+                    mPlayer.stop();
+                    mPlayer = MediaPlayer.create(context, R.raw.dpstp);
+                    d++;
+                }
             }
             mPlayer.start();
         }
@@ -263,15 +281,25 @@ public class SpaceShooterView extends SurfaceView implements Runnable{
             canvas.drawColor(Color.BLACK);
             canvas.drawBitmap(pauseButton.getBitmap(), pauseButton.getX(), pauseButton.getY(), paint);
             // Choose the brush color for drawing
-            if(score <= 100) {
+            if(score < 100) {
                 paint.setColor(Color.WHITE);
                 for (int i = 0; i < 50; i++)
                     canvas.drawCircle(random.nextInt(screenX), random.nextInt(screenY), 1, paint);
             }
-            else if (score > 100){
+            else if (score >= 100 && score < 500){
+                for (EnemyShip e : enemyShip){
+                    e.setShipSpeed(1100);
+                }
                 paint.setColor(Color.argb(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
                 for (int i = 0; i < 50; i++)
                     canvas.drawCircle(random.nextInt(screenX), random.nextInt(screenY), 7, paint);
+            }
+            else if (score >= 500){
+                for (EnemyShip e : enemyShip){
+                    e.setShipSpeed(1400);
+                }
+                paint.setColor(Color.argb(random.nextInt(255), random.nextInt(255), random.nextInt(255), 255));
+                    canvas.drawRect(0, 0 ,screenX, screenY, paint);
             }
             paint.setColor(Color.argb(255, 255, 255, 255));
 

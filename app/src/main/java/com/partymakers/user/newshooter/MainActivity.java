@@ -1,10 +1,14 @@
-package com.example.user.newshooter;
+package com.partymakers.user.newshooter;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.user.newshooter.R;
+import com.partymakers.user.newshooter.SpaceShooterActivity;
+import com.partymakers.user.newshooter.SpaceShooterView;
 
 /**
  * Created by user on 6/9/2016.
@@ -25,6 +29,6 @@ public class MainActivity extends Activity {
     public void onStartButton(View v) {
         Intent intent = new Intent(this, SpaceShooterActivity.class);
         startActivity(intent);
-        this.finish();
+        //this.finish();
     }
 }
