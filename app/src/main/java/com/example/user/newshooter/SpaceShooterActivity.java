@@ -51,7 +51,7 @@ public class SpaceShooterActivity extends Activity {
         // Tell the gameView resume method to execute
         spaceShooterView.resume();
     }
-//
+
     // This method executes when the player quits the game
     @Override
     protected void onPause() {
