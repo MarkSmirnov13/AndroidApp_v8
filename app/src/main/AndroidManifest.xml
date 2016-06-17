@@ -9,7 +9,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
-        <activity android:name="com.partymakers.user.newshooter.MainActivity"
+        <activity android:name="com.spaceshooter.user.shooter.MainActivity"
             android:noHistory="true"
             android:launchMode="singleInstance">
             <intent-filter>
@@ -18,10 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.partymakers.user.newshooter.SpaceShooterActivity"
+        <activity android:name="com.spaceshooter.user.shooter.SpaceShooterActivity"
             android:noHistory="true"
             android:launchMode="singleInstance"/>
-        <activity android:name="com.partymakers.user.newshooter.FinalActivity"
+        <activity android:name="com.spaceshooter.user.shooter.FinalActivity"
             android:noHistory="true"
             android:launchMode="singleInstance"></activity>
     </application>

@@ -12,7 +12,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
-        applicationId "com.partymakers.user.newshooter"
+        applicationId "com.spaceshooter.user.shooter"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
